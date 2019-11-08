@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BajigurScript</title>
+    <style type="text/css" media="screen">
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: rgba(54, 54, 54, 0.89);
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        pre {
+            margin: 0;
+        }
+
+        @font-face {
+            font-family: 'Inconsolata';
+            src: './fonts/Inconsolata/Inconsolata.otf';
+        }
+
+        html {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .haha {
+            /* margin: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0; */
+            /*  */
+        }
+
+        /* #editor { */
+        /* margin: 0; */
+        /* position: absolute; */
+        /* top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0; */
+        /* position: relative !important; */
+        /* } */
+
+        .koding_ {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            font-size: 24px;
+            font-family: 'Inconsolata';
+        }
+
+        .editor {
+            /* flex: 1;
+            position: relative !important;
+            border: 1px solid lightgray;
+            margin: auto;
+            height: 200px;
+            width: 100%; */
+            font-size: 20px;
+            font-family: 'Inconsolata';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            /* width: 50%; */
+        }
+
+        .ed1 {
+            width: 65%;
+        }
+
+        .ed2 {
+            left: 65%;
+            width: 35%;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- <pre id="editor" class="haha"></pre> -->
+
+    <div class="koding_">
+        <div class="edit">
+            <pre class="editor ed1" id="editor"></pre>
+        </div>
+        <div class="edit">
+            <pre class="editor ed2" id="editor2"></pre>
+        </div>
+    </div>
+
+
+    <!-- load ace -->
+    <script src="./ace.js"></script>
+    <!-- load ace settings_menu extension -->
+    <script src="./ext-settings_menu.js"></script>
+    <script>
+        var editor = ace.edit("editor");
+        ace.require('ace/ext/settings_menu').init(editor);
+        editor.setTheme("ace/theme/tomorrow_night_eighties");
+        editor.session.setMode("ace/mode/coffee");
+        editor.commands.addCommands([{
+            name: "showSettingsMenu",
+            bindKey: {
+                win: "Ctrl-q",
+                mac: "Ctrl-q"
+            },
+            exec: function (editor) {
+                editor.showSettingsMenu();
+            },
+            readOnly: true
+        }]);
+
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: false
+        });
+
+        var editor2 = ace.edit("editor2");
+        ace.require('ace/ext/settings_menu').init(editor2);
+        editor2.setTheme("ace/theme/tomorrow_night_eighties");
+        editor2.session.setMode("ace/mode/javascript");
+        editor2.setReadOnly(true)
+        editor2.setOptions({
+            useWorker: false
+        })
+
+        // editor2.commands.addCommands([{
+        //     name: "showSettingsMenu",
+        //     bindKey: {
+        //         win: "Ctrl-q",
+        //         mac: "Ctrl-q"
+        //     },
+        //     exec: function (editor) {
+        //         editor2.showSettingsMenu();
+        //     },
+        //     readOnly: true
+        // }]);
+
+        // editor2.setOptions({
+        //     enableBasicAutocompletion: true,
+        //     enableSnippets: true,
+        //     enableLiveAutocompletion: false
+        // });
+
+        function runn() {
+            try {
+                // run_();
+                compile_(true);
+            } catch (e) {
+                // pasteResult(e)
+                console.log(e)
+                pasteResult(e.toString())
+            }
+        }
+
+        editor.commands.addCommand({
+            name: "run",
+            exec: runn,
+            bindKey: {
+                win: "ctrl-q",
+                mac: "cmd-q"
+            }
+        });
+
+        document.querySelector("#editor").addEventListener('keyup', function (x) {
+            // console.log('upp');
+        })
+
+        // function save_() {
+        //     var standar_lib = `tulis = (x) -> console.log x\nlogs = []`;
+        //     var s = [standar_lib, editor.session.doc.$lines.join('\n')].join('\n');
+        //     window.localStorage('kodingan') = x;
+        // }
+    </script>
+</body>
+<script src="./bajigurscript.js"></script>
+<script src="./app/app.coffee" type="text/coffeescript"></script>
+<script>
+    function compile_(run) {
+        // var standar_lib = `logs = []\ntulis = (x) ->\n console.log x\n \`logs.push(x)\``;
+        var standar_lib = ``;
+        var s = [standar_lib, editor.session.doc.$lines.join('\n')].join('\n');
+        var r = CoffeeScript.compile(s);
+        // pasteResult(r);
+
+        if (run) {
+            CoffeeScript.run(s);
+            var a = compile_(false);
+            pasteResult(window.bajigur_logs.join("\n") + "\n\n/**\n" + a + "\n**/");
+            return
+        }
+        return r;
+    }
+
+    function pasteResult(x) {
+        editor2.session.replace(new ace.Range(0, 0, editor2.session.getLength(), 1), x);
+    }
+
+    // function run_(x) {
+    //     var r = CoffeeScript.run(x);
+    // }
+
+    function compile() {
+        var sekarang = new Date().getTime();
+        var r = compile_();
+        var sisa = `${new Date().getTime() - sekarang} ms`;
+        console.log(`compiled in ${sisa}`)
+        return r;
+        // var q = document.querySelector('#editor2');
+    }
+</script>
+
+</html>
