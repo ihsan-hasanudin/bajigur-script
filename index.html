@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>BajigurScript</title>
     <style type="text/css" media="screen">
+        @import url('https://fonts.googleapis.com/css?family=Inconsolata&display=swap');
+        
         /* width */
         ::-webkit-scrollbar {
             width: 10px;
@@ -28,11 +30,6 @@
 
         pre {
             margin: 0;
-        }
-
-        @font-face {
-            font-family: 'Inconsolata';
-            src: './fonts/Inconsolata/Inconsolata.otf';
         }
 
         html {
@@ -80,7 +77,7 @@
             height: 200px;
             width: 100%; */
             font-size: 20px;
-            font-family: 'Inconsolata';
+            font-family: 'Inconsolata', monospace;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -121,6 +118,10 @@
     <!-- load ace settings_menu extension -->
     <script src="./ext-settings_menu.js"></script>
     <script>
+        (function(){
+            alert(`PERHATOSAN`,`'Ctrl + Q' kanggo compile sreng ngajalankeun script`);   
+        }).call().this
+        
         var editor = ace.edit("editor");
         ace.require('ace/ext/settings_menu').init(editor);
         editor.setTheme("ace/theme/tomorrow_night_eighties");
