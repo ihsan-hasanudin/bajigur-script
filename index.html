@@ -174,7 +174,7 @@
         function runn() {
             try {
                 // run_();
-                compile_(false);
+                compile_(true);
             } catch (e) {
                 // pasteResult(e)
                 console.log(e)
@@ -215,7 +215,8 @@
         if (run) {
             CoffeeScript.run(s);
             var a = compile_(false);
-            pasteResult(window.bajigur_logs.join("\n") + "\n\n/**\n" + a + "\n**/");
+//              + "\n\n/**\n" + a + "\n**/"
+            pasteResult(window.bajigur_logs.join("\n"));
             return
         }
         return r;
